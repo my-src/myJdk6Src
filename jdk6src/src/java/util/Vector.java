@@ -103,6 +103,7 @@ public class Vector<E>
      * @throws IllegalArgumentException if the specified initial capacity
      *         is negative
      */
+    // capacity是Vector的默认容量大小，capacityIncrement是每次Vector容量增加时的增量值
     public Vector(int initialCapacity, int capacityIncrement) {
 	super();
         if (initialCapacity < 0)
@@ -120,6 +121,7 @@ public class Vector<E>
      * @throws IllegalArgumentException if the specified initial capacity
      *         is negative
      */
+    // capacity是Vector的默认容量大小。当由于增加数据导致容量增加时，每次容量会增加一倍
     public Vector(int initialCapacity) {
 	this(initialCapacity, 0);
     }

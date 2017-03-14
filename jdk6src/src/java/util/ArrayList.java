@@ -95,6 +95,7 @@ public class ArrayList<E> extends AbstractList<E>
      *
      * @serial
      */
+    //动态数组的实际大小即包含的元素个数
     private int size;
 
     /**
@@ -157,7 +158,7 @@ public class ArrayList<E> extends AbstractList<E>
      */
     public void ensureCapacity(int minCapacity) {
 	modCount++;
-	int oldCapacity = elementData.length;
+	int oldCapacity = elementData.length;//比较size+1和数组长度
 	if (minCapacity > oldCapacity) {
 	    Object oldData[] = elementData;
 	    int newCapacity = (oldCapacity * 3)/2 + 1;
@@ -271,6 +272,7 @@ public class ArrayList<E> extends AbstractList<E>
      * @return an array containing all of the elements in this list in
      *         proper sequence
      */
+    // 返回ArrayList的Object数组,这样list内容的变化不会影响返回的object数组，即认为是“安全”的
     public Object[] toArray() {
         return Arrays.copyOf(elementData, size);
     }
@@ -299,6 +301,7 @@ public class ArrayList<E> extends AbstractList<E>
      *         this list
      * @throws NullPointerException if the specified array is null
      */
+ // 返回ArrayList的模板数组。所谓模板数组，即可以将T设为任意的数据类型
     public <T> T[] toArray(T[] a) {
         if (a.length < size)
             // Make a new array of a's runtime type, but my contents:
@@ -389,7 +392,7 @@ public class ArrayList<E> extends AbstractList<E>
 	modCount++;
 	E oldValue = (E) elementData[index];
 
-	int numMoved = size - index - 1;
+	int numMoved = size - index - 1;//要移动的元素个数
 	if (numMoved > 0)
 	    System.arraycopy(elementData, index+1, elementData, index,
 			     numMoved);

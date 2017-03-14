@@ -28,6 +28,7 @@ package java.util;
  * @version 1.30, 11/17/05
  * @since   JDK1.0
  */
+//栈，先进后出FILO
 public
 class Stack<E> extends Vector<E> {
     /**

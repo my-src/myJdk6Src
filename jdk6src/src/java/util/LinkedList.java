@@ -194,6 +194,8 @@ public class LinkedList<E>
      * @param e element to be appended to this list
      * @return <tt>true</tt> (as specified by {@link Collection#add})
      */
+    // 将节点(节点数据是e)添加到表头(header)之前。
+    // 即，将节点添加到双向链表的末端
     public boolean add(E e) {
 	addBefore(e, header);
         return true;
@@ -762,10 +764,12 @@ public class LinkedList<E>
 	}
     }
 
+    // 双向链表的节点所对应的数据结构
+    // 包含3部分：上一节点，下一节点，当前节点值
     private static class Entry<E> {
-	E element;
-	Entry<E> next;
-	Entry<E> previous;
+	E element;// 当前节点所包含的值
+	Entry<E> next;// 下一个节点
+	Entry<E> previous;// 上一个节点
 
 	Entry(E element, Entry<E> next, Entry<E> previous) {
 	    this.element = element;
@@ -774,12 +778,14 @@ public class LinkedList<E>
 	}
     }
 
+    //双向列表是一个环形，添加在entry和entry.previous之间
+    // 将节点(节点数据是e)添加到entry节点之前
     private Entry<E> addBefore(E e, Entry<E> entry) {
 	Entry<E> newEntry = new Entry<E>(e, entry, entry.previous);
 	newEntry.previous.next = newEntry;
 	newEntry.next.previous = newEntry;
-	size++;
-	modCount++;
+	size++;// 修改LinkedList大小
+	modCount++; // 修改LinkedList的修改统计数：用来实现fail-fast机制
 	return newEntry;
     }
 
