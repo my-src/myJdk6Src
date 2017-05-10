@@ -49,7 +49,7 @@ public class AtomicLong extends Number implements java.io.Serializable {
       } catch (Exception ex) { throw new Error(ex); }
     }
 
-    private volatile long value;
+    private volatile long value;//轻量级锁,多线程访问时直接读取主内存，而不是读取本地拷贝
 
     /**
      * Creates a new AtomicLong with the given initial value.

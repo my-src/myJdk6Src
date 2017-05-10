@@ -141,7 +141,7 @@ public interface Lock {
      * Acquires the lock.
      *
      * <p>If the lock is not available then the current thread becomes
-     * disabled for thread scheduling purposes and lies dormant until the
+     * disabled for thread scheduling purposes and lies dormant(ÐÝÃß) until the
      * lock has been acquired.
      *
      * <p><b>Implementation Considerations</b>

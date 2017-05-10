@@ -78,6 +78,7 @@ import java.util.concurrent.atomic.*;
  * @since 1.5
  * @author Doug Lea
  */
+//独占锁，可重入锁
 public class ReentrantLock implements Lock, java.io.Serializable {
     private static final long serialVersionUID = 7373984872572414699L;
     /** Synchronizer providing all implementation mechanics */
@@ -197,6 +198,13 @@ public class ReentrantLock implements Lock, java.io.Serializable {
     final static class FairSync extends Sync {
         private static final long serialVersionUID = -3000897897090466540L;
 
+        /**
+         * 设置“锁的状态”的参数。对于“独占锁”而言，锁处于可获取状态时，它的状态值是0；锁被线程初次获取到了，它的状态值就变成了1
+         * 由于ReentrantLock(公平锁/非公平锁)是可重入锁，所以“独占锁”可以被单个线程多此获取，每获取1次就将锁的状态+1。
+         * 也就是说，初次获取锁时，通过acquire(1)将锁的状态值设为1；再次获取锁时，将锁的状态值设为2；依次类推...
+         * 这就是为什么获取锁时，传入的参数是1的原因了。
+         * 可重入就是指锁可以被单个线程多次获取
+         */
         final void lock() {
             acquire(1);
         }
@@ -206,15 +214,17 @@ public class ReentrantLock implements Lock, java.io.Serializable {
          * recursive call or no waiters or is first.
          */
         protected final boolean tryAcquire(int acquires) {
-            final Thread current = Thread.currentThread();
-            int c = getState();
-            if (c == 0) {
+            final Thread current = Thread.currentThread();// 获取“当前线程”
+            int c = getState();// 获取“独占锁”的状态
+            if (c == 0) {// c=0意味着“锁没有被任何线程锁拥有”,首次获取
                 if (isFirst(current) &&
                     compareAndSetState(0, acquires)) {
                     setExclusiveOwnerThread(current);
                     return true;
                 }
             }
+            // 如果“独占锁”的拥有者已经为“当前线程”，
+            // 则将更新锁的状态。
             else if (current == getExclusiveOwnerThread()) {
                 int nextc = c + acquires;
                 if (nextc < 0)
@@ -245,7 +255,7 @@ public class ReentrantLock implements Lock, java.io.Serializable {
     }
 
     /**
-     * Acquires the lock.
+     * Acquires the lock. 获取锁
      *
      * <p>Acquires the lock if it is not held by another thread and returns
      * immediately, setting the lock hold count to one.

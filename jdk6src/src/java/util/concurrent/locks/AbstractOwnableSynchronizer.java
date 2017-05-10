@@ -41,6 +41,7 @@ public abstract class AbstractOwnableSynchronizer
      * This method does not otherwise impose any synchronization or
      * <tt>volatile</tt> field accesses.
      */
+    // exclusiveOwnerThread是当前拥有“独占锁”的线程
     protected final void setExclusiveOwnerThread(Thread t) {
         exclusiveOwnerThread = t;
     }
